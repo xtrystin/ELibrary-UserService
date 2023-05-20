@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ELibrary_UserService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class WeatherForecastController : ControllerBase
     {
