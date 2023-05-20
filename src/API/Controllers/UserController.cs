@@ -54,7 +54,6 @@ public class UserController : ControllerBase
 
     
     [HttpPatch("{userId}")]
-    [Authorize(Roles = "admin, employee")]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(401, Type = typeof(string))]
     [ProducesResponseType(403, Type = typeof(string))]
@@ -63,8 +62,16 @@ public class UserController : ControllerBase
     [SwaggerOperation(Summary = "Modify user data. You can send params which you want to change. Omitted params will remain the same. description with value \"\" will set description to null")]
     public async Task<ActionResult> Patch(string userId, [FromBody] ModifyUserModel data)
     {
-        await _userProvider.ModifyUser(userId, data);
-        return NoContent();
+        var senderUserId = User.Identity.Name;
+        var senderIsAdmin = User.IsInRole("admin");
+        var senderIsEmployee = User.IsInRole("employee");
+        if (senderUserId == userId || senderIsAdmin || senderIsEmployee)
+        {
+            await _userProvider.ModifyUser(userId, data);
+            return NoContent();
+        }
+        else
+            return Forbid();
     }
 
     
