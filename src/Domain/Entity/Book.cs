@@ -8,5 +8,10 @@
         public IReadOnlyCollection<User> Users => _users;
 
         protected Book() { }
+
+        public Book(int id)
+        {
+            Id = id;
+        }
     }
 }

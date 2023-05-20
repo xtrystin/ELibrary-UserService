@@ -1,22 +1,21 @@
 ﻿using ELibrary_UserService.Application.Command;
 using MassTransit;
-using MassTransit.Caching;
 using RabbitMqMessages;
 
 namespace ELibrary_UserService.Consumers;
 
-public class UserCreatedConsumer : IConsumer<UserCreated>
+public class UserDeletedConsumer : IConsumer<UserDeleted>
 {
     private readonly IUserProvider _userProvider;
 
-    public UserCreatedConsumer(IUserProvider userProvider)
+    public UserDeletedConsumer(IUserProvider userProvider)
     {
         _userProvider = userProvider;
     }
 
-    public async Task Consume(ConsumeContext<UserCreated> context)
+    public async Task Consume(ConsumeContext<UserDeleted> context)
     {
         var message = context.Message;
-        await _userProvider.CreateUser(message);
+        await _userProvider.DeleteUser(message.UserId);
     }
 }

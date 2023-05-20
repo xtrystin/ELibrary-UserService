@@ -5,7 +5,7 @@ namespace ELibrary_UserService.Domain.Entity
 {
     public class User
     {
-        public Guid Id { get; private set; }
+        public string Id { get; private set; }
         private string _firstName;
         private string _lastName;
         private bool _isAccountBlocked;
@@ -19,9 +19,11 @@ namespace ELibrary_UserService.Domain.Entity
         public void Block() => _isAccountBlocked = true;
         public void UnBlock() => _isAccountBlocked = false;
 
+        private readonly int MAX_AMOUNT_UNTIL_BLOCK = 200;
+
         protected User() { }
 
-        public User(Guid id, string firstName, string lastName)
+        public User(string id, string firstName, string lastName)
         {
             Id = id;
             _firstName = firstName;
@@ -45,8 +47,12 @@ namespace ELibrary_UserService.Domain.Entity
             _watchList.Remove(book);
         }
 
-        public void ModifyDescription(Description description)
-            => _description = description;
+        public void Modify(string firstname, string lastname, string? description)
+        {
+            _firstName = string.IsNullOrEmpty(firstname) ? _firstName : firstname;
+            _lastName = string.IsNullOrEmpty(lastname) ? _lastName : lastname;
+            _description = description is null ? _description : (description == "") ? null : new Description(description);
+        }
 
         public void Pay(decimal amount)
         {
@@ -55,6 +61,13 @@ namespace ELibrary_UserService.Domain.Entity
         }
 
         public void AddAmountToPay(decimal amount)
-            => _amountToPay += amount;
+        {
+            _amountToPay += amount;
+            if (_amountToPay >= MAX_AMOUNT_UNTIL_BLOCK)
+            {
+                Block();
+                throw new UserBlockedException();
+            }
+        }
     }
 }
