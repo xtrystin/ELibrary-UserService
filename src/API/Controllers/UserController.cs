@@ -76,7 +76,7 @@ public class UserController : ControllerBase
 
     
     [HttpPost("{userId}/Pay")]
-    //[Authorize(Roles = "admin, employee")]
+    [Authorize(Roles = "admin, employee")]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(401, Type = typeof(string))]
     [ProducesResponseType(403, Type = typeof(string))]

@@ -9,5 +9,6 @@ public class UserReadModel
     public string? Description { get; set; }
     public decimal AmountToPay { get; set; }
     public bool IsAccountBlocked { get; set; }
+    public List<BookBasicInfoReadModel> WatchList { get; set; } = new();
 
 }
