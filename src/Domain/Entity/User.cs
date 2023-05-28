@@ -58,6 +58,8 @@ namespace ELibrary_UserService.Domain.Entity
         {
             if (_amountToPay - amount < 0)
                 throw new System.Exception("Account amount to pay cannot be lower than 0");
+
+            _amountToPay -= amount;
         }
 
         public void AddAmountToPay(decimal amount)
