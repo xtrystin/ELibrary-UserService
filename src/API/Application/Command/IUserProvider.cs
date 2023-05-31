@@ -1,5 +1,5 @@
 ﻿using ELibrary_UserService.Application.Command.Model;
-using RabbitMqMessages;
+using ServiceBusMessages;
 
 namespace ELibrary_UserService.Application.Command;
 

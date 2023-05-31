@@ -1,10 +1,10 @@
 ﻿using ELibrary_UserService.Application.Command;
 using MassTransit;
-using RabbitMqMessages;
+using ServiceBusMessages;
 
 namespace ELibrary_UserService.Consumers;
 
-public class BookRemovedConsumer : IConsumer<BookRemoved>
+public class BookRemovedConsumer : IConsumer<BookDeleted>
 {
     private readonly IBookProvider _bookProvider;
 
@@ -13,7 +13,7 @@ public class BookRemovedConsumer : IConsumer<BookRemoved>
         _bookProvider = bookProvider;
     }
 
-    public async Task Consume(ConsumeContext<BookRemoved> context)
+    public async Task Consume(ConsumeContext<BookDeleted> context)
     {
         var message = context.Message;
         await _bookProvider.RemoveBook(message.BookId);

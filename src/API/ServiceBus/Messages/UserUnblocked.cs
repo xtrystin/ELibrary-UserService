@@ -1,4 +1,4 @@
-﻿namespace ELibrary_UserService.RabbitMq.Messages;
+﻿namespace ServiceBusMessages;
 
 public class UserUnblocked
 {

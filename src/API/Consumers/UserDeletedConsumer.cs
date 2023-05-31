@@ -1,6 +1,6 @@
 ﻿using ELibrary_UserService.Application.Command;
 using MassTransit;
-using RabbitMqMessages;
+using ServiceBusMessages;
 
 namespace ELibrary_UserService.Consumers;
 

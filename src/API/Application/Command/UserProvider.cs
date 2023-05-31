@@ -1,25 +1,24 @@
 ﻿using ELibrary_UserService.Application.Command.Exception;
 using ELibrary_UserService.Application.Command.Model;
 using ELibrary_UserService.Domain.Entity;
-using ELibrary_UserService.Domain.Repository;
-using RabbitMqMessages;
-using MassTransit;
 using ELibrary_UserService.Domain.Exception;
-using ELibrary_UserService.RabbitMq.Messages;
+using ELibrary_UserService.Domain.Repository;
+using ELibrary_UserService.ServiceBus;
+using ServiceBusMessages;
 
 namespace ELibrary_UserService.Application.Command;
 
 public class UserProvider : IUserProvider
 {
     private readonly IUserRepository _userRepository;
-    private readonly IBus _bus;
+    private readonly IMessagePublisher _messagePublisher;
     private readonly IBookRepository _bookRepository;
 
-    public UserProvider(IUserRepository userRepository, IBus bus, 
+    public UserProvider(IUserRepository userRepository, IMessagePublisher messagePublisher, 
         IBookRepository bookRepository)
     {
         _userRepository = userRepository;
-        _bus = bus;
+        _messagePublisher = messagePublisher;
         _bookRepository = bookRepository;
     }
 
@@ -57,7 +56,7 @@ public class UserProvider : IUserProvider
         catch (UserBlockedException ex)
         {
             var message = new UserBlocked() { UserId = userId };
-            await _bus.Publish(message);
+            await _messagePublisher.Publish(message);
         }
 
         await _userRepository.UpdateAsync(user);
@@ -99,7 +98,7 @@ public class UserProvider : IUserProvider
         user.Block();
 
         var message = new UserBlocked() { UserId = userId };
-        // await _bus.Publish(message);
+        await _messagePublisher.Publish(message);
 
         await _userRepository.UpdateAsync(user);
     }
@@ -110,7 +109,7 @@ public class UserProvider : IUserProvider
         user.UnBlock();
 
         var message = new UserUnblocked() { UserId = userId };
-        //await _bus.Publish(message);
+        await _messagePublisher.Publish(message);
 
         await _userRepository.UpdateAsync(user);
     }
