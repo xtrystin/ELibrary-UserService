@@ -24,8 +24,8 @@ internal class UserRepository : IUserRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<User> GetAsync(string userId)
-        => await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
+    public async Task<User?> GetAsync(string userId)
+        => await _dbContext.Users.Include(x => x.Reactions).Include(x => x.Reviews).FirstOrDefaultAsync(x => x.Id == userId);
 
     public async Task UpdateAsync(User entity)
     {

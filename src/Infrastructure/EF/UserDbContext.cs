@@ -18,6 +18,8 @@ public class UserDbContext : DbContext
 		modelBuilder.HasDefaultSchema(DEFAULT_SCHEMA);
 
 		modelBuilder.ApplyConfiguration(new UserEntityTypeConfig());
+		modelBuilder.ApplyConfiguration(new ReviewTypeConfig());
+		modelBuilder.ApplyConfiguration(new ReactionTypeConfig());
 		modelBuilder.Entity<Book>().ToTable("Book");
 		
 	}

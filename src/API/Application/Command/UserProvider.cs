@@ -114,11 +114,55 @@ public class UserProvider : IUserProvider
         await _userRepository.UpdateAsync(user);
     }
 
+    public async Task AddOrModifyReaction(string userId, int bookId, bool like)
+    {
+        var user = await GetUserAsyncOrThrow(userId);
+        var book = await GetBookOrThrow(bookId);
+        user.AddOrModifyReaction(book, like);
+
+        await _userRepository.UpdateAsync(user);
+    }
+
+    public async Task RemoveReaction(string userId, int bookId)
+    {
+        var user = await GetUserAsyncOrThrow(userId);
+        var book = await GetBookOrThrow(bookId);
+        user.RemoveReaction(book);
+
+        await _userRepository.UpdateAsync(user);
+    }
+
+    public async Task AddOrModifyReview(string userId, int bookId, string content)
+    {
+        var user = await GetUserAsyncOrThrow(userId);
+        var book = await GetBookOrThrow(bookId);
+        user.AddOrModifyReview(book, content);
+
+        await _userRepository.UpdateAsync(user);
+    }
+
+    public async Task RemoveReview(string userId, int bookId)
+    {
+        var user = await GetUserAsyncOrThrow(userId);
+        var book = await GetBookOrThrow(bookId);
+        user.RemoveReview(book);
+
+        await _userRepository.UpdateAsync(user);
+    }
+
     private async Task<User> GetUserAsyncOrThrow(string userId)
     {
         var user = await _userRepository.GetAsync(userId);
         if (user is null)
             throw new EntityNotFoundException("User has not been found");
         return user;
+    }
+
+    private async Task<Book> GetBookOrThrow(int bookId)
+    {
+        var book = await _bookRepository.GetAsync(bookId);
+        if (book == null)
+            throw new EntityNotFoundException("Book does not exist");
+        return book;
     }
 }

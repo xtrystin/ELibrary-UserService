@@ -15,6 +15,12 @@ namespace ELibrary_UserService.Domain.Entity
         private List<Book> _watchList = new();
         public IReadOnlyCollection<Book> WatchList => _watchList;
 
+        List<Reaction> _reactions = new();
+        public IReadOnlyCollection<Reaction> Reactions => _reactions;
+
+        List<Review> _reviews = new();
+        public IReadOnlyCollection<Review> Reviews => _reviews;
+
         public bool IsBlocked => _isAccountBlocked;
         public void Block() => _isAccountBlocked = true;
         public void UnBlock() => _isAccountBlocked = false;
@@ -70,6 +76,53 @@ namespace ELibrary_UserService.Domain.Entity
                 Block();
                 throw new UserBlockedException();
             }
+        }
+
+        public void AddOrModifyReaction(Book book, bool like)
+        {
+            var reaction = _reactions.FirstOrDefault(x => x.Book == book);
+            if (reaction is null)
+            {
+                reaction = new Reaction(book, this, like);
+                _reactions.Add(reaction);
+            }
+            else
+            {
+                if (like is true)
+                    reaction.Like();
+                else
+                    reaction.Dislike();
+            }
+        }
+
+        public void RemoveReaction(Book book)
+        {
+            var reaction = _reactions.FirstOrDefault(x => x.Book == book);
+            if (reaction is null)
+                throw new NoItemException("Reaction for this user and book has not been found");
+            _reactions.Remove(reaction);
+        }
+
+        public void AddOrModifyReview(Book book, string content)
+        {
+            var review = _reviews.FirstOrDefault(x => x.Book == book);
+            if (review is null)
+            {
+                review = new Review(book, this, content);
+                _reviews.Add(review);
+            }
+            else
+            {
+                review.ChangeContent(content);
+            }
+        }
+
+        public void RemoveReview(Book book)
+        {
+            var review = _reviews.FirstOrDefault(x => x.Book == book);
+            if (review is null)
+                throw new NoItemException("Review for this user and book has not been found");
+            _reviews.Remove(review);
         }
     }
 }

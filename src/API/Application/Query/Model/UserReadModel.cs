@@ -10,5 +10,7 @@ public class UserReadModel
     public decimal AmountToPay { get; set; }
     public bool IsAccountBlocked { get; set; }
     public List<BookBasicInfoReadModel> WatchList { get; set; } = new();
+    public List<ReactionReadModel> Reactions { get; set; } = new();
+    public List<ReviewReadModel> Reviews { get; set; } = new();
 
 }
