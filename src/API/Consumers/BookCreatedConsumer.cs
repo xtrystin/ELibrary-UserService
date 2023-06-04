@@ -19,3 +19,19 @@ public class BookCreatedConsumer : IConsumer<BookCreated>
         await _bookProvider.CreateBook(message.BookId);
     }
 }
+
+public class BookCreatedUConsumer : IConsumer<BookCreatedU>
+{
+    private readonly IBookProvider _bookProvider;
+
+    public BookCreatedUConsumer(IBookProvider bookProvider)
+    {
+        _bookProvider = bookProvider;
+    }
+
+    public async Task Consume(ConsumeContext<BookCreatedU> context)
+    {
+        var message = context.Message;
+        await _bookProvider.CreateBook(message.BookId);
+    }
+}

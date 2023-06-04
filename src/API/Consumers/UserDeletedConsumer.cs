@@ -19,3 +19,19 @@ public class UserDeletedConsumer : IConsumer<UserDeleted>
         await _userProvider.DeleteUser(message.UserId);
     }
 }
+
+public class UserDeletedUConsumer : IConsumer<UserDeletedU>
+{
+    private readonly IUserProvider _userProvider;
+
+    public UserDeletedUConsumer(IUserProvider userProvider)
+    {
+        _userProvider = userProvider;
+    }
+
+    public async Task Consume(ConsumeContext<UserDeletedU> context)
+    {
+        var message = context.Message;
+        await _userProvider.DeleteUser(message.UserId);
+    }
+}

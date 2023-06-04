@@ -30,15 +30,6 @@ public class UserProvider : IUserProvider
         await _userRepository.UpdateAsync(user);
     }
 
-    public async Task CreateUser(UserCreated userData)
-    {
-        if (await _userRepository.Exists(userData.UserId))
-            throw new Exception.AlreadyExistsException("This user already exists");
-
-        var user = new User(userData.UserId, userData.FirstName, userData.LastName);
-        await _userRepository.AddAsync(user);
-    }
-
     public async Task DeleteUser(string userId)
     {
         var user = await GetUserAsyncOrThrow(userId);
@@ -53,7 +44,7 @@ public class UserProvider : IUserProvider
         {
             user.AddAmountToPay(amount);
         }
-        catch (UserBlockedException ex)
+        catch (UserBlockedException)
         {
             var message = new UserBlocked() { UserId = userId };
             await _messagePublisher.Publish(message);

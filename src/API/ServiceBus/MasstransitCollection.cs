@@ -14,8 +14,18 @@ namespace ELibrary_UserService.RabbitMq
             services.AddMassTransit(x =>
             {
                 // add consumers
+                x.AddConsumer<BookCreatedConsumer>();
+                x.AddConsumer<BookCreatedUConsumer>();
+
+                x.AddConsumer<BookRemovedConsumer>();
+                x.AddConsumer<BookRemovedUConsumer>();
+
+                x.AddConsumer<OvertimeReturnConsumer>();
+                x.AddConsumer<OvertimeReturnUConsumer>();
+
                 x.AddConsumer<UserCreatedConsumer>();
                 x.AddConsumer<UserCreatedUConsumer>();
+
                 x.AddConsumer<UserDeletedConsumer>();
                 x.AddConsumer<UserDeletedUConsumer>();
 
@@ -41,39 +51,42 @@ namespace ELibrary_UserService.RabbitMq
                     x.UsingAzureServiceBus((context, cfg) =>
                     {
                         cfg.Host(configuration["AzureServiceBusConnectionString"]);
-
+                        
                         /// Publisher configuration ///
-                        EndpointConvention.Map<UserBlocked>(new Uri($"queue:{nameof(UserBlocked)}"));
-                        cfg.Message<UserBlocked>(cfgTopology => cfgTopology.SetEntityName(nameof(UserBlocked)));
+                        EndpointConvention.Map<UserBlockedBr>(new Uri($"queue:{nameof(UserBlockedBr)}"));
+                        cfg.Message<UserBlockedBr>(cfgTopology => cfgTopology.SetEntityName(nameof(UserBlockedBr)));
                        
-                        EndpointConvention.Map<UserUnblocked>(new Uri($"queue:{nameof(UserUnblocked)}"));
-                        cfg.Message<UserUnblocked>(cfgTopology => cfgTopology.SetEntityName(nameof(UserUnblocked)));
+                        EndpointConvention.Map<UserUnblockedBr>(new Uri($"queue:{nameof(UserUnblockedBr)}"));
+                        cfg.Message<UserUnblockedBr>(cfgTopology => cfgTopology.SetEntityName(nameof(UserUnblockedBr)));
 
 
                         /// Consumers configuration ///
-                        // usercreated
-                        cfg.ReceiveEndpoint("usercreated", e =>
+                        cfg.ReceiveEndpoint("bookcreatedu", e =>
                         {
                             e.ConfigureConsumeTopology = false;     // configuration for ASB Basic Tier - queues only
                             e.PublishFaults = false;
-                            e.ConfigureConsumer<UserCreatedConsumer>(context);
+                            e.ConfigureConsumer<BookCreatedUConsumer>(context);
 
                         });
+                        cfg.ReceiveEndpoint("bookremovedu", e =>
+                        {
+                            e.ConfigureConsumeTopology = false;     // configuration for ASB Basic Tier - queues only
+                            e.PublishFaults = false;
+                            e.ConfigureConsumer<BookRemovedUConsumer>(context);
+
+                        });
+                        cfg.ReceiveEndpoint("overtimereturnu", e =>
+                        {
+                            e.ConfigureConsumeTopology = false;     // configuration for ASB Basic Tier - queues only
+                            e.PublishFaults = false;
+                            e.ConfigureConsumer<OvertimeReturnUConsumer>(context);
+
+                        }); 
                         cfg.ReceiveEndpoint("usercreatedu", e =>
                         {
                             e.ConfigureConsumeTopology = false;     // configuration for ASB Basic Tier - queues only
                             e.PublishFaults = false;
                             e.ConfigureConsumer<UserCreatedUConsumer>(context);
-
-                        });
-
-                        // userdeleted
-                        cfg.ReceiveEndpoint("userdeleted", e =>
-                        {
-                            e.ConfigureConsumeTopology = false;     // configuration for ASB Basic Tier - queues only
-                            e.PublishFaults = false;
-                            e.ConfigureConsumer<UserDeletedConsumer>(context);
-
                         });
                         cfg.ReceiveEndpoint("userdeletedu", e =>
                         {

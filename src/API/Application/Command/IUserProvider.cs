@@ -10,7 +10,6 @@ public interface IUserProvider
     Task AddOrModifyReview(string userId, int bookId, string content);
     Task AddToWatchList(string userId, int bookId);
     Task BlockUser(string userId);
-    Task CreateUser(UserCreated userData);
     Task DeleteUser(string userId);
     Task ModifyUser(string userId, ModifyUserModel data);
     Task Pay(string userId, decimal amount);

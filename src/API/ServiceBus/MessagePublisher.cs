@@ -3,7 +3,6 @@ using ServiceBusMessages;
 
 namespace ELibrary_UserService.ServiceBus;
 
-
 public class MessagePublisher : IMessagePublisher
 {
     private readonly IBus _bus;
@@ -23,7 +22,26 @@ public class MessagePublisher : IMessagePublisher
         }
         else
         {
-            await _bus.Send(message);   // send to one queue
+            // Publisg to many queues -> because Basic Tier ASB allowed only 1-1 queues, no topics
+            if (message is UserBlocked)
+            {
+                var m = message as UserBlocked;
+                var borrowingServiceMessage = new UserBlockedBr() { UserId = m.UserId };
+
+                await _bus.Send(borrowingServiceMessage);
+            }
+            else if (message is UserUnblocked)
+            {
+                var m = message as UserUnblocked;
+                var userServiceMessage = new UserUnblockedBr() { UserId = m.UserId };
+
+                await _bus.Send(userServiceMessage);
+            }
+            else
+            {
+                // send to one queue
+                await _bus.Send(message);
+            }
         }
     }
 }

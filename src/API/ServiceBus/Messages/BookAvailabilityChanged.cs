@@ -1,18 +1,17 @@
 ﻿namespace ServiceBusMessages;
 
-public class BookCreated
+public class BookAvailabilityChanged
+{
+    public int BookId { get; set; }
+    public int Amount { get; set; }
+}
+public class BookAvailabilityChangedBr
 {
     public int BookId { get; set; }
     public int Amount { get; set; }
 }
 
-public class BookCreatedBr
-{
-    public int BookId { get; set; }
-    public int Amount { get; set; }
-}
-
-public class BookCreatedU
+public class BookAvailabilityChangedBk
 {
     public int BookId { get; set; }
     public int Amount { get; set; }

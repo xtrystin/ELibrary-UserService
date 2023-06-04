@@ -19,3 +19,19 @@ public class OvertimeReturnConsumer : IConsumer<OvertimeReturn>
         await _userProvider.AddAmounToPay(message.UserId, message.AmountToPay);
     }
 }
+
+public class OvertimeReturnUConsumer : IConsumer<OvertimeReturnU>
+{
+    private readonly IUserProvider _userProvider;
+
+    public OvertimeReturnUConsumer(IUserProvider userProvider)
+    {
+        _userProvider = userProvider;
+    }
+
+    public async Task Consume(ConsumeContext<OvertimeReturnU> context)
+    {
+        var message = context.Message;
+        await _userProvider.AddAmounToPay(message.UserId, message.AmountToPay);
+    }
+}
