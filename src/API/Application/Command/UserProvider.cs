@@ -56,9 +56,16 @@ public class UserProvider : IUserProvider
     public async Task Pay(string userId, decimal amount)
     {
         var user = await GetUserAsyncOrThrow(userId);
-        user.Pay(amount);
-
-        _userRepository.UpdateAsync(user);
+        try
+        {
+            user.Pay(amount);
+        }
+        catch (UserUnBlockedException)
+        {
+            var message = new UserUnblocked() { UserId = userId };
+            await _messagePublisher.Publish(message);
+        }
+        await _userRepository.UpdateAsync(user);
     }
 
     public async Task AddToWatchList(string userId, int bookId)

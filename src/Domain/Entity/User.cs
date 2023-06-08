@@ -65,7 +65,10 @@ namespace ELibrary_UserService.Domain.Entity
             if (_amountToPay - amount < 0)
                 throw new System.Exception("Account amount to pay cannot be lower than 0");
 
+            decimal prevAmountToPay = _amountToPay;
             _amountToPay -= amount;
+            if (prevAmountToPay >= MAX_AMOUNT_UNTIL_BLOCK && _amountToPay < MAX_AMOUNT_UNTIL_BLOCK)
+                throw new UserUnBlockedException();
         }
 
         public void AddAmountToPay(decimal amount)
