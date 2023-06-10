@@ -48,7 +48,7 @@ namespace ELibrary_UserService.Domain.Entity
 
         public void RemoveFromWatchList(Book book)
         {
-            if (_watchList.Contains(book))
+            if (_watchList.Contains(book) is false)
                 throw new NoItemException("Book is not in the list");
             _watchList.Remove(book);
         }
