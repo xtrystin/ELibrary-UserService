@@ -19,7 +19,7 @@ public class UserCreatedConsumer : IConsumer<UserCreated>
     {
         var message = context.Message;
         var user = await _userRepository.GetAsync(message.UserId);
-        if (user is not null)
+        if (user is null)
         {
             user = new User(message.UserId, message.FirstName, message.LastName);
             await _userRepository.AddAsync(user);
@@ -40,7 +40,7 @@ public class UserCreatedUConsumer : IConsumer<UserCreatedU>
     {
         var message = context.Message;
         var user = await _userRepository.GetAsync(message.UserId);
-        if (user is not null)
+        if (user is null)
         {
             user = new User(message.UserId, message.FirstName, message.LastName);
             await _userRepository.AddAsync(user);
