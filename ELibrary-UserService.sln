@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ELibrary-UserService.Infras
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ELibrary-UserService.Domain", "src\Domain\ELibrary-UserService.Domain.csproj", "{42257332-F98E-4B58-89EA-85DD686B0B5F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ELibrary-UserService.Tests", "src\Tests\ELibrary-UserService.Tests\ELibrary-UserService.Tests.csproj", "{7FFBE9D4-5643-4B62-A05C-256F6E50788E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{42257332-F98E-4B58-89EA-85DD686B0B5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42257332-F98E-4B58-89EA-85DD686B0B5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42257332-F98E-4B58-89EA-85DD686B0B5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FFBE9D4-5643-4B62-A05C-256F6E50788E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FFBE9D4-5643-4B62-A05C-256F6E50788E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FFBE9D4-5643-4B62-A05C-256F6E50788E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FFBE9D4-5643-4B62-A05C-256F6E50788E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
