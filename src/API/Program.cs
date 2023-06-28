@@ -2,6 +2,7 @@ using ELibrary_UserService.Application;
 using ELibrary_UserService.Extensions;
 using ELibrary_UserService.Infrastructure.EF;
 using ELibrary_UserService.RabbitMq;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,9 +32,14 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseCors("OpenCorsPolicy");
 
+app.UseMetricServer();
+app.UseHttpMetrics(options => options.AddCustomLabel("host", context => context.Request.Host.Host));
+
 app.UseAuthentication();
 app.UseAuthorization();
 
+
 app.MapControllers();
+
 
 app.Run();
