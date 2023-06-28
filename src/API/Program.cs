@@ -2,6 +2,7 @@ using ELibrary_UserService.Application;
 using ELibrary_UserService.Extensions;
 using ELibrary_UserService.Infrastructure.EF;
 using ELibrary_UserService.RabbitMq;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,5 +36,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMetricServer();
+app.UseHttpMetrics(options => options.AddCustomLabel("host", context => context.Request.Host.Host));
 
 app.Run();
