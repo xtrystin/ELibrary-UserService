@@ -35,9 +35,10 @@ app.UseCors("OpenCorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
-
 app.UseMetricServer();
 app.UseHttpMetrics(options => options.AddCustomLabel("host", context => context.Request.Host.Host));
+
+app.MapControllers();
+
 
 app.Run();
