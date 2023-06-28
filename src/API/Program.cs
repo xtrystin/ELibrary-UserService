@@ -32,11 +32,12 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseCors("OpenCorsPolicy");
 
+app.UseMetricServer();
+app.UseHttpMetrics(options => options.AddCustomLabel("host", context => context.Request.Host.Host));
+
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseMetricServer();
-app.UseHttpMetrics(options => options.AddCustomLabel("host", context => context.Request.Host.Host));
 
 app.MapControllers();
 
